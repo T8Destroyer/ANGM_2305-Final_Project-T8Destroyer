@@ -49,10 +49,3 @@ class Vector2(object):
     def asIntTup(self):
         return int(self.x), int(self.y)
     
-
-def main():
-    v = Vector2(3,4)
-    print(v)
-
-if __name__ == "__main__":
-    main()
