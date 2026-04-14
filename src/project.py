@@ -48,21 +48,15 @@ class Pacman(object):
 
     def getValidKey(self):
         key = pygame.key.get_pressed()
-        match key:
-            case [K_UP]:
-                print("up")
-                return UP
-            case [K_DOWN]:
-                print("down")
-                return DOWN
-            case [K_LEFT]:
-                print("left")
-                return LEFT
-            case [K_RIGHT]:
-                print("right")
-                return RIGHT
-            case _:
-                return STOP
+        if key[K_UP]:
+            return UP
+        if key[K_DOWN]:
+            return DOWN
+        if key[K_LEFT]:
+            return LEFT
+        if key[K_RIGHT]:
+            return RIGHT
+        return STOP
             
     def draw(self, screen):
         p = self.position.asIntTup()
