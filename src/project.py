@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from vector import *
 from constants import *
 
 class GameController(object):
@@ -20,7 +21,27 @@ class GameController(object):
     def render(self):
         pass
 
+class Pacman(object):
 
+    def __init__(self):
+        self.name = PACMAN
+        self.position = Vector2(200, 400)
+        self.directions = {
+            STOP:Vector2(),
+            UP: Vector2(0, -1),
+            DOWN:Vector2(0, 1),
+            LEFT:Vector2(-1, 0),
+            RIGHT:Vector2(1, 0)
+        }
+        self.direction = STOP
+        self.speed = 100 #tutorial does 100 * TILEAREA/25 for some reason
+        self.radius = 10
+        self.color = yellow
+
+    def update(self, dt):
+        self.position += self.directions[self.direction] * self.speed * dt
+        direction = self.getValidKey()
+        self.direction = direction
 
 def main():
     print("Hello World!")
