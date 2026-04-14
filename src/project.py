@@ -29,13 +29,6 @@ def main():
     clock = pygame.time.Clock()
     dt = 0
 
-    black = pygame.Color(0, 0, 0)
-    yellow = pygame.Color(255, 255, 0)
-    red = pygame.Color(255, 0, 0)
-    pink = pygame.Color(247, 177, 247)
-    cyan = pygame.Color(0, 247, 216)
-    orange = pygame.Color(247, 155, 1)
-
     screen = pygame.display.set_mode(SCREENSIZE)
     background = pygame.Surface(SCREENSIZE)
     background.fill(black)
