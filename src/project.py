@@ -51,7 +51,7 @@ class Pacman(object):
         self.position = self.node.position.copy()
 
     def update(self, dt):
-        #self.position += self.directions[self.direction] * self.speed * dt
+        self.position += self.directions[self.direction] * self.speed * dt
         direction = self.getValidKey()
         if self.overshotTarget():
             self.node = self.target
@@ -89,8 +89,8 @@ class Pacman(object):
         if self.target is not None:
             vec1 = self.target.position - self.node.position
             vec2 = self.position - self.node.position
-            node2Target = vec1.magnituteSquared()
-            node2Self = vec2.magnituteSquared()
+            node2Target = vec1.magnitude()
+            node2Self = vec2.magnitude()
             return node2Self >= node2Target
         return False
             
