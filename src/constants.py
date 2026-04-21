@@ -13,6 +13,7 @@ red = pygame.Color(255, 0, 0)
 pink = pygame.Color(247, 177, 247)
 cyan = pygame.Color(0, 247, 216)
 orange = pygame.Color(247, 155, 1)
+white = pygame.Color(255, 255, 255)
 #Movement Variables
 STOP = 0
 UP = 1
