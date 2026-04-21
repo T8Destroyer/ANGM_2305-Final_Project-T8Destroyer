@@ -53,14 +53,22 @@ class Pacman(object):
     def update(self, dt):
         self.position += self.directions[self.direction] * self.speed * dt
         direction = self.getValidKey()
+
         if self.overshotTarget():
             self.node = self.target
             self.target = self.getNewTarget(direction)
             if self.target is not self.node:
                 self.direction = direction
             else:
+                #self.direction = STOP
+            #self.setPosition()
+                self.target = self.getNewTarget(self.direction)
+            if self.target is self.node:
                 self.direction = STOP
             self.setPosition()
+        else:
+            if self.oppositeDirection(direction):
+                self.reverseDirection()
 
     def validDirection(self,direction):
         if direction is not STOP:
