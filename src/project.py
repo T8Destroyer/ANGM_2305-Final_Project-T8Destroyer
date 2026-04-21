@@ -77,7 +77,7 @@ class Node(object):
                 line_start = self.position.asTuple()
                 line_end = self.neighbors[i].position.asTuple()
                 pygame.draw.line(screen, white, line_start, line_end, 4)
-                pygame.draw.circle(screen, red, self.position.asInt(), 12)
+                pygame.draw.circle(screen, red, self.position.asIntTup(), 12)
 
 class Maze(object):
 
@@ -85,24 +85,34 @@ class Maze(object):
         self.nodeList = []
 
     def setupTestNodes(self):
-        nd_A = Node(80, 80)
-        nd_B = Node(160, 80)
-        nd_C = Node(80, 40)
-        nd_D = Node(160, 80)
+        nd_A = Node(80, 160)
+        nd_B = Node(160, 160)
+        nd_C = Node(160, 80)
+        nd_D = Node(240, 160)
+        nd_E = Node(160, 240)
+        nd_F = Node(240, 240)
 
-        self.nodeList.append(
+        self.nodeList = (
             nd_A,
             nd_B,
             nd_C,
             nd_D,
+            nd_E,
+            nd_F
         )
 
         nd_A.neighbors[RIGHT] = nd_B
         nd_B.neighbors[LEFT] = nd_A
         nd_B.neighbors[UP] = nd_C
         nd_B.neighbors[RIGHT] = nd_D
+        nd_B.neighbors[DOWN] = nd_E
         nd_C.neighbors[DOWN] = nd_B
         nd_D.neighbors[LEFT] = nd_B
+        nd_D.neighbors[DOWN] = nd_F
+        nd_E.neighbors[UP] = nd_B
+        nd_E.neighbors[RIGHT] = nd_F
+        nd_F.neighbors[LEFT] = nd_E
+        nd_F.neighbors[UP] = nd_D
 
     def draw (self, screen):
         for node in self.nodeList:
