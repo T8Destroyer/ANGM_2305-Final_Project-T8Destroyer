@@ -12,7 +12,7 @@ class GameController(object):
     def startGame(self):
         self.maze = Maze()
         self.maze.setupTestNodes()
-        self.pacman = Pacman()
+        self.pacman = Pacman(self.maze.nodeList[0])
 
     def update(self, dt):
         self.pacman.update(dt)
@@ -29,9 +29,9 @@ class GameController(object):
 
 class Pacman(object):
 
-    def __init__(self):
+    def __init__(self, node):
         self.name = PACMAN
-        self.position = Vector2(200, 400)
+        #self.position = Vector2(200, 400)
         self.directions = {
             STOP:Vector2(),
             UP:Vector2(0, -1),
@@ -43,11 +43,29 @@ class Pacman(object):
         self.speed = 100 #* TILEAREA/25
         self.radius = 10
         self.color = yellow
+        self.node = node
+        self.setPosition()
+
+    def setPosition(self):
+        self.position = self.node.position.copy()
 
     def update(self, dt):
-        self.position += self.directions[self.direction] * self.speed * dt
+        #self.position += self.directions[self.direction] * self.speed * dt
         direction = self.getValidKey()
         self.direction = direction
+        self.node = self.getNewTarget(direction)
+        self.setPosition()
+
+    def validDirection(self,direction):
+        if direction is not STOP:
+            if self.node.neighbors[direction] is not None:
+                return True
+        return False
+    
+    def getNewTarget(self, direction):
+        if self.validDirection(direction):
+            return self.node.neighbors[direction]
+        return self.node
 
     def getValidKey(self):
         key = pygame.key.get_pressed()
