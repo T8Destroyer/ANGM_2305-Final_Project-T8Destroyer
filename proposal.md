@@ -32,11 +32,11 @@ Minimal Viable Outcome:
 ## Milestones
 
 - Week 1
-  1. Recreate the maze and pellets
-  2. Add collision to the maze
+  1. Recreate the maze and pellets 
+  2. Add collision to the maze DONE
 
 - Week 2
-  1. Get PacMan moving
+  1. Get PacMan moving DONE
   2. Recreate the 4 original ghosts
   3. Make 4 new ghosts
 

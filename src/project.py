@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from vector import *
 from constants import *
+import numpy as np
 
 class GameController(object):
 
@@ -11,7 +12,7 @@ class GameController(object):
 
     def startGame(self):
         self.maze = Maze()
-        self.maze.setupTestNodes()
+        #self.maze.setupTestNodes()
         self.pacman = Pacman(self.maze.nodeList[0])
 
     def update(self, dt):
@@ -136,6 +137,27 @@ class Maze(object):
 
     def __init__(self):
         self.nodeList = []
+        self.level = level
+        self.nodesLUT = {}
+        self.nodeSymbols = ["+"]
+        self.pathSymbolls = ["."]
+        data = self.readMazeFile(level)
+        self.createNodeTable(data)
+        self.connectHorizontally(data)
+        self.connectVertically(data)
+
+    def readMazeFile(self, textfile):
+        return np.loadtxt(textfile, dtype="<U1")
+
+    def createNodeTable(self, data, x_offset=0, y_offset=0):
+        for row in list(range(data.shape[0])):
+            for col in list(range(data.shape[1])):
+                if data[row][col] in self.nodeSymbols:
+                    x, y = self.constructKey(col+x_offset, row+y_offset)
+                    self.nodesLUT[(x, y)] = Node(x, y)
+
+    def constructKey(self, x, y):
+        return x * TILEAREA, y * TILEAREA
 
     def setupTestNodes(self):
         nd_A = Node(80, 160)
