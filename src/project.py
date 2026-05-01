@@ -135,7 +135,7 @@ class Node(object):
 
 class Maze(object):
 
-    def __init__(self):
+    def __init__(self, level):
         self.nodeList = []
         self.level = level
         self.nodesLUT = {}
@@ -190,6 +190,16 @@ class Maze(object):
                 elif data_trans[col][row] not in self.pathSymbols:
                     key = None
 
+    def getNodeFromPixels(self, x, y):
+        if (x, y) in self.nodesLUT.keys():
+            return self.nodesLUT[(x, y)]
+        return None
+        
+    def getNodeFromTiles(self, col, row):
+        x, y = self.constructKey(col, row)
+        if (x, y) in self.nodesLUT.keys():
+            return self.nodesLUT[(x, y)]
+        return None
 
     def setupTestNodes(self):
         nd_A = Node(80, 160)
