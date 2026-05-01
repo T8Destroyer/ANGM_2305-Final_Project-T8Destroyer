@@ -12,8 +12,9 @@ class GameController(object):
 
     def startGame(self):
         self.maze = Maze()
-        #self.maze.setupTestNodes()
-        self.pacman = Pacman(self.maze.nodeList[0])
+        self.nodes = Maze("mazetest.txt")
+        #self.pacman = Pacman(self.maze.nodeList[0])
+        self.pacman = Pacman(self.nodes.getStartTempNode())
 
     def update(self, dt):
         self.pacman.update(dt)
@@ -205,7 +206,7 @@ class Maze(object):
         return list(self.nodesLUT.values())[0]
 
     def draw (self, screen):
-        for node in self.nodeList:
+        for node in self.nodesLUT.values():
             node.draw(screen)
 
 def main():
