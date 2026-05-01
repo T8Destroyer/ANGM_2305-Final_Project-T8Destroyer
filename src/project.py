@@ -11,10 +11,10 @@ class GameController(object):
         self.background = background
 
     def startGame(self):
-        self.maze = Maze()
-        self.nodes = Maze("mazetest.txt")
+        #self.maze = Maze()
+        self.maze = Maze("mazetest.txt")
         #self.pacman = Pacman(self.maze.nodeList[0])
-        self.pacman = Pacman(self.nodes.getStartTempNode())
+        self.pacman = Pacman(self.maze.getStartTempNode())
 
     def update(self, dt):
         self.pacman.update(dt)
@@ -169,7 +169,7 @@ class Maze(object):
                         key = self.constructKey(col + x_offset, row + y_offset)
                     else:
                         otherKey = self.constructKey(col+x_offset, row+y_offset)
-                        self.nodesLUT.neighbors[RIGHT] = self.nodesLUT[otherKey]
+                        self.nodesLUT[key].neighbors[RIGHT] = self.nodesLUT[otherKey]
                         self.nodesLUT[otherKey].neighbors[LEFT] = self.nodesLUT[key]
                         key = otherKey
                 elif data[row][col] not in self.pathSymbols:
@@ -185,7 +185,7 @@ class Maze(object):
                         key = self.constructKey(col + x_offset, row + y_offset)
                     else:
                         otherKey = self.constructKey(col + x_offset, row + y_offset)
-                        self.nodesLUT[key].neighbors[DOWN] = self.nodesLUT[key]
+                        self.nodesLUT[key].neighbors[DOWN] = self.nodesLUT[otherKey]
                         self.nodesLUT[otherKey].neighbors[UP] = self.nodesLUT[key]
                         key = otherKey
                 elif data_trans[col][row] not in self.pathSymbols:

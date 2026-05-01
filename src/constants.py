@@ -22,3 +22,10 @@ LEFT = 2
 RIGHT = -2
 #Character Variables
 PACMAN = 0
+
+#Note: for making mazes through text files:
+#   + = node
+#   . = path
+#   X = empty
+#Build the maze in a txt file with a space between each character horizonatally, then fill any unused spaces with X
+
