@@ -21,11 +21,18 @@ class GameController(object):
     def update(self, dt):
         self.pacman.update(dt)
         self.pellets.update(dt)
+        self.checkPelletEvents()
         self.checkEvents()
         self.draw()
 
     def checkEvents(self):
         pass
+
+    def checkPelletEvents(self):
+        pellet = self.pacman.eatPellets(self.pellets.pellet_list)
+        if pellet:
+            self.pellets.num_eaten += 1
+            self.pellets.pellet_list.remove(pellet)
 
     def draw(self):
         self.screen.blit(self.background, (0, 0))
