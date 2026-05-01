@@ -234,6 +234,22 @@ class Pellet(object):
             p = self.position.asIntTup()
             pygame.draw.circle(screen, self.color, p , self.radius)
 
+class PowerPellet(Pellet):
+
+    def __init__(self, row, col):
+        self.pellet = Pellet(self, row, col)
+        self.name = POWERPELLET
+        self.radius = int(8 * TILEAREA / 16)
+        self.points = 50
+        self.flash_time = 0.2
+        self.timer = 0
+
+    def update(self, dt):
+        self.timer += dt
+        if self.timer >= self.flash_time:
+            self.visible = not self.visible
+            self.timer = 0
+
 def main():
     print("Hello World!")
     pygame.init()
