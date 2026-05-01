@@ -218,6 +218,22 @@ class Maze(object):
         for node in self.nodesLUT.values():
             node.draw(screen)
 
+class Pellet(object):
+
+    def __init__(self, row, col):
+        self.name = PELLET
+        self.position = Vector2(col * TILEAREA, row * TILEAREA)
+        self.color = white
+        self.radius = int(4 * TILEAREA / 16)
+        #self.col_radius = int(4 * TILEAREA / 16)
+        self.points = 10
+        self.visible = True
+
+    def draw(self, screen):
+        if self.visible:
+            p = self.position.asIntTup()
+            pygame.draw.circle(screen, self.color, p , self.radius)
+
 def main():
     print("Hello World!")
     pygame.init()
