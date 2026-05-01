@@ -32,7 +32,7 @@ Minimal Viable Outcome:
 ## Milestones
 
 - Week 1
-  1. Recreate the maze and pellets 
+  1. Recreate the maze and pellets DONE
   2. Add collision to the maze DONE
 
 - Week 2
