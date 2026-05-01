@@ -21,8 +21,10 @@ DOWN = -1
 LEFT = 2
 RIGHT = -2
 PORTAL = 3
-#Character Variables
+#Character/Object Variables
 PACMAN = 0
+PELLET = 1
+POWERPELLET = 2
 
 #Note: for making mazes through text files:
 #   + = node
