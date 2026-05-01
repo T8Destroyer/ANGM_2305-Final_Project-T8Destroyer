@@ -12,7 +12,7 @@ class GameController(object):
 
     def startGame(self):
         #self.maze = Maze()
-        self.maze = Maze("mazetest.txt")
+        self.maze = Maze("maze1.txt")
         #self.pacman = Pacman(self.maze.nodeList[0])
         self.pacman = Pacman(self.maze.getStartTempNode())
 
@@ -124,7 +124,7 @@ class Node(object):
 
     def __init__(self, x, y):
         self.position = Vector2(x, y)
-        self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None}
+        self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None, PORTAL: None}
 
     def draw(self, screen):
         for i in self.neighbors.keys():
