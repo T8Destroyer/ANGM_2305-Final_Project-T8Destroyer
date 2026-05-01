@@ -14,6 +14,7 @@ class GameController(object):
         #self.maze = Maze()
         self.maze = Maze("maze1.txt")
         #self.pacman = Pacman(self.maze.nodeList[0])
+        self.maze.setPortalPair((0, 17), (27, 17))
         self.pacman = Pacman(self.maze.getStartTempNode())
 
     def update(self, dt):
@@ -42,7 +43,7 @@ class Pacman(object):
             RIGHT:Vector2(1, 0)
         }
         self.direction = STOP
-        self.speed = 100 #* TILEAREA/25
+        self.speed = 110
         self.radius = 10
         self.color = yellow
         self.node = node
@@ -58,12 +59,12 @@ class Pacman(object):
 
         if self.overshotTarget():
             self.node = self.target
+            if self.node.neighbors[PORTAL] is not None:
+                self.node = self.node.neighbors[PORTAL]
             self.target = self.getNewTarget(direction)
             if self.target is not self.node:
                 self.direction = direction
             else:
-                #self.direction = STOP
-            #self.setPosition()
                 self.target = self.getNewTarget(self.direction)
             if self.target is self.node:
                 self.direction = STOP
@@ -72,7 +73,7 @@ class Pacman(object):
             if self.oppositeDirection(direction):
                 self.reverseDirection()
 
-    def validDirection(self,direction):
+    def validDirection(self, direction):
         if direction is not STOP:
             if self.node.neighbors[direction] is not None:
                 return True
@@ -131,7 +132,8 @@ class Node(object):
             if self.neighbors[i] is not None:
                 line_start = self.position.asTuple()
                 line_end = self.neighbors[i].position.asTuple()
-                pygame.draw.line(screen, white, line_start, line_end, 4)
+                if self.neighbors[PORTAL] is None:
+                    pygame.draw.line(screen, white, line_start, line_end, 4)
                 pygame.draw.circle(screen, red, self.position.asIntTup(), 12)
 
 class Maze(object):
@@ -191,6 +193,13 @@ class Maze(object):
                 elif data_trans[col][row] not in self.pathSymbols:
                     key = None
 
+    def setPortalPair(self, pair1, pair2):
+        key1 = self.constructKey(*pair1)
+        key2 = self.constructKey(*pair2)
+        if key1 in self.nodesLUT.keys() and key2 in self.nodesLUT.keys():
+            self.nodesLUT[key1].neighbors[PORTAL] = self.nodesLUT[key2]
+            self.nodesLUT[key2].neighbors[PORTAL] = self.nodesLUT[key1]
+
     def getNodeFromPixels(self, x, y):
         if (x, y) in self.nodesLUT.keys():
             return self.nodesLUT[(x, y)]
@@ -215,6 +224,8 @@ def main():
     pygame.display.set_caption("PAC-ier MAN")
     clock = pygame.time.Clock()
     dt = 0
+
+    font = pygame.font.SysFont("monocraft", 12)
 
     screen = pygame.display.set_mode(RESOLUTION)
     background = pygame.Surface(RESOLUTION)
