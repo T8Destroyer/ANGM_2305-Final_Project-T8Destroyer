@@ -16,9 +16,11 @@ class GameController(object):
         #self.pacman = Pacman(self.maze.nodeList[0])
         self.maze.setPortalPair((0, 17), (27, 17))
         self.pacman = Pacman(self.maze.getStartTempNode())
+        self.pellets = PelletGroup("maze1.txt")
 
     def update(self, dt):
         self.pacman.update(dt)
+        self.pellets.update(dt)
         self.checkEvents()
         self.draw()
 
@@ -28,6 +30,7 @@ class GameController(object):
     def draw(self):
         self.screen.blit(self.background, (0, 0))
         self.maze.draw(self.screen)
+        self.pellets.draw(self.screen)
         self.pacman.draw(self.screen)
 
 class Pacman(object):
@@ -237,7 +240,7 @@ class Pellet(object):
 class PowerPellet(Pellet):
 
     def __init__(self, row, col):
-        self.pellet = Pellet(self, row, col)
+        Pellet.__init__(self, row, col)
         self.name = POWERPELLET
         self.radius = int(8 * TILEAREA / 16)
         self.points = 50
