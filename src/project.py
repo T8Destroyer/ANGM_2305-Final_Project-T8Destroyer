@@ -11,8 +11,8 @@ class GameController(object):
         self.background = background
 
     def startGame(self):
-        #self.maze = Maze()
-        self.maze = Maze("maze1.txt")
+        #self.maze = NodeGroup()
+        self.maze = NodeGroup("maze1.txt")
         #self.pacman = Pacman(self.maze.nodeList[0])
         self.maze.setPortalPair((0, 17), (27, 17))
         self.pacman = Pacman(self.maze.getStartTempNode())
@@ -136,7 +136,7 @@ class Node(object):
                     pygame.draw.line(screen, white, line_start, line_end, 4)
                 pygame.draw.circle(screen, red, self.position.asIntTup(), 12)
 
-class Maze(object):
+class NodeGroup(object):
 
     def __init__(self, level):
         self.nodeList = []
