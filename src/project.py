@@ -140,7 +140,7 @@ class Maze(object):
         self.level = level
         self.nodesLUT = {}
         self.nodeSymbols = ["+"]
-        self.pathSymbolls = ["."]
+        self.pathSymbols = ["."]
         data = self.readMazeFile(level)
         self.createNodeTable(data)
         self.connectHorizontally(data)
@@ -158,6 +158,38 @@ class Maze(object):
 
     def constructKey(self, x, y):
         return x * TILEAREA, y * TILEAREA
+    
+    def connectHorizontally(self, data, x_offset=0, y_offset=0):
+        for row in list (range(data.shape[0])):
+            key = None
+            for col in list(range(data.shape[1])):
+                if data[row][col] in self.nodeSymbols:
+                    if key is None:
+                        key = self.constructKey(col + x_offset, row + y_offset)
+                    else:
+                        otherKey = self.constructKey(col+x_offset, row+y_offset)
+                        self.nodesLUT.neighbors[RIGHT] = self.nodesLUT[otherKey]
+                        self.nodesLUT[otherKey].neighbors[LEFT] = self.nodesLUT[key]
+                        key = otherKey
+                elif data[row][col] not in self.pathSymbols:
+                    key = None
+
+    def connectVertically(self, data, x_offset=0, y_offset=0):
+        data_trans = data.transpose()
+        for col in list(range(data_trans.shape[0])):
+            key = None
+            for row in list(range(data_trans.shape[1])):
+                if data_trans[col][row] in self.nodeSymbols:
+                    if key is None:
+                        key = self.constructKey(col + x_offset, row + y_offset)
+                    else:
+                        otherKey = self.constructKey(col + x_offset, row + y_offset)
+                        self.nodesLUT[key].neighbors[DOWN] = self.nodesLUT[key]
+                        self.nodesLUT[otherKey].neighbors[UP] = self.nodesLUT[key]
+                        key = otherKey
+                elif data_trans[col][row] not in self.pathSymbols:
+                    key = None
+
 
     def setupTestNodes(self):
         nd_A = Node(80, 160)
