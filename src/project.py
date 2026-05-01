@@ -52,6 +52,7 @@ class Pacman(object):
         self.node = node
         self.setPosition()
         self.target = node
+        self.collideRadius = 5
 
     def setPosition(self):
         self.position = self.node.position.copy()
@@ -119,6 +120,15 @@ class Pacman(object):
             if direction == self.direction * -1:
                 return True
         return False
+    
+    def eatPellets(self, pelletList):
+        for pellet in pelletList:
+            d = self.position - pellet.position
+            d_sqr = d.magnitudeSquared()
+            r_sqr = (pellet.radius + self.collideRadius)**2
+            if d_sqr <= r_sqr:
+                return pellet
+        return None
             
     def draw(self, screen):
         p = self.position.asIntTup()
