@@ -5,7 +5,7 @@ PAC-ier MAN
 https://github.com/T8Destroyer/ANGM_2305-Final_Project-T8Destroyer.git
 
 ## Description
-This will be a simple recreation of the classic arcade game PAC-MAN, with new enemies to run from. This will add 4 new kinds of ghosts with unique original behaviors, and give the player the ability to choose what ghosts they will face.
+This will be a simple recreation of the classic arcade game PAC-MAN, with new enemies to run from. This will add 4 new kinds of ghosts with unique original behaviors, and give the player the ability to choose what ghosts they will face. This project will use the tutorial website pacmancode.com to help make the base game
 
 ## Features
 - Feature 1
