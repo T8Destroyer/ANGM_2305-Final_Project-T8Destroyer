@@ -45,7 +45,6 @@ class Pacman(object):
 
     def __init__(self, node):
         self.name = PACMAN
-        #self.position = Vector2(200, 400)
         self.directions = {
             STOP:Vector2(),
             UP:Vector2(0, -1),
