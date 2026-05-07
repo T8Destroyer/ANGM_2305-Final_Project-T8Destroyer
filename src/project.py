@@ -13,15 +13,15 @@ class GameController(object):
         self.background = background
 
     def startGame(self):
-        #self.maze = NodeGroup()
         self.maze = NodeGroup("maze1.txt")
-        #self.pacman = Pacman(self.maze.nodeList[0])
         self.maze.setPortalPair((0, 17), (27, 17))
         self.pacman = Pacman(self.maze.getStartTempNode())
+        self.ghost = Ghost(self.maze.getStartTempNode())
         self.pellets = PelletGroup("maze1.txt")
 
     def update(self, dt):
         self.pacman.update(dt)
+        self.ghost.update(dt)
         self.pellets.update(dt)
         self.checkPelletEvents()
         self.checkEvents()
@@ -41,26 +41,14 @@ class GameController(object):
         self.maze.draw(self.screen)
         self.pellets.draw(self.screen)
         self.pacman.draw(self.screen)
+        self.ghost.draw(self.screen)
 
-class Pacman(object):
+class Pacman(Entity):
 
     def __init__(self, node):
+        Entity.__init__(self, node)
         self.name = PACMAN
-        self.directions = {
-            STOP:Vector2(),
-            UP:Vector2(0, -1),
-            DOWN:Vector2(0, 1),
-            LEFT:Vector2(-1, 0),
-            RIGHT:Vector2(1, 0)
-        }
-        self.direction = STOP
-        self.speed = 110
-        self.radius = 10
         self.color = yellow
-        self.node = node
-        self.setPosition()
-        self.target = node
-        self.collideRadius = 5
 
     def update(self, dt):
         self.position += self.directions[self.direction] * self.speed * dt
@@ -102,6 +90,14 @@ class Pacman(object):
             if d_sqr <= r_sqr:
                 return pellet
         return None
+
+class Ghost(Entity):
+
+    def __init__(self, node):
+        Entity.__init__(self, node)
+        self.name = GHOST
+        self.points = 200
+        self.color = red
 
 class Node(object):
 

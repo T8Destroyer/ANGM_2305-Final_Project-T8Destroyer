@@ -31,7 +31,7 @@ class Entity(object):
 
         if self.overshotTarget():
             self.node = self.target
-            directions = self.validDirection()
+            directions = self.validDirections()
             direction = self.randomDirection(directions)
             if self.disablePortal == False: #may need to change
                 if self.node.neighbors[PORTAL] is not None:
