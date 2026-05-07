@@ -16,6 +16,9 @@ class GameController(object):
     def startGame(self):
         self.maze = NodeGroup("maze1.txt")
         self.maze.setPortalPair((0, 17), (27, 17))
+        homekey = self.maze.createHomeNodes(11.5, 14)
+        self.maze.connectHomeNodes(homekey, (12,14), LEFT)
+        self.maze.connectHomeNodes(homekey, (15,14), RIGHT)
         self.pacman = Pacman(self.maze.getStartTempNode())
         self.ghost = Ghost(self.maze.getStartTempNode(), self.pacman)
         self.pellets = PelletGroup("maze1.txt")
@@ -161,12 +164,12 @@ class NodeGroup(object):
         homedata = np.array([["X","X","+","X","X"],
                              ["X","X",".","X","X"],
                              ["+","X",".","X","+"],
-                             [".",".","+",".","+"],
+                             ["+",".","+",".","+"],
                              ["+","X","X","X","+"]])
         self.createNodeTable(homedata, x_offset, y_offset)
         self.connectHorizontally(homedata, x_offset, y_offset)
         self.connectVertically(homedata, x_offset, y_offset)
-        self.homekey = self.constructKey(x_offset+2, y_offset+2)
+        self.homekey = self.constructKey(x_offset+2, y_offset)
         return self.homekey
 
     def constructKey(self, x, y):
