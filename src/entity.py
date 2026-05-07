@@ -53,6 +53,19 @@ class Entity(object):
                 return True
         return False
     
+    def validDirections(self):
+        directions = []
+        for key in [UP, DOWN, LEFT, RIGHT]:
+            if self.validDirection(key):
+                if key != self.direction * -1:
+                    directions.append(key)
+        if len(directions) == 0:
+            directions.append(self.direction * -1)
+        return directions
+    
+    def randomDirection(self, directions):
+        return directions[randint(0, len(directions)-1)]
+    
     def getNewTarget(self, direction):
         if self.validDirection(direction):
             return self.node.neighbors[direction]
