@@ -3,6 +3,7 @@ import pygame
 from pygame.locals import *
 from pellet import PelletGroup
 import numpy as np
+from modes import ModeController
 from entity import Entity
 from constants import *
 
@@ -16,7 +17,7 @@ class GameController(object):
         self.maze = NodeGroup("maze1.txt")
         self.maze.setPortalPair((0, 17), (27, 17))
         self.pacman = Pacman(self.maze.getStartTempNode())
-        self.ghost = Ghost(self.maze.getStartTempNode())
+        self.ghost = Ghost(self.maze.getStartTempNode(), self.pacman)
         self.pellets = PelletGroup("maze1.txt")
 
     def update(self, dt):
@@ -93,13 +94,29 @@ class Pacman(Entity):
 
 class Ghost(Entity):
 
-    def __init__(self, node):
+    def __init__(self, node, pacman=None):
         Entity.__init__(self, node)
         self.name = GHOST
         self.points = 200
         self.color = red
         self.goal = Vector2()
         self.directionMethod = self.goalDirection
+        self.pacman = pacman
+        self.mode = ModeController(self)
+
+    def update(self, dt):
+        self.mode.update(dt)
+        if self.mode.current == SCATTER:
+            self.scatter()
+        if self.mode.current == CHASE:
+            self.chase()
+        Entity.update(self, dt)
+
+    def scatter(self):
+        self.goal = Vector2()
+
+    def chase(self):
+        self.goal = self.pacman.position
 
 class Node(object):
 

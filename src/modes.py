@@ -4,6 +4,7 @@ class MainMode(object):
 
     def __init__(self):
         self.timer = 0
+        self.duration = 0
         self.scatter()
 
     def update(self, dt):
