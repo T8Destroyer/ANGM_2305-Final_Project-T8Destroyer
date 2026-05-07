@@ -26,7 +26,23 @@ class Entity(object):
         self.visible = True
         self.disablePortal = False
 
-    #def update(self, dt):
+    def update(self, dt):
+        self.position += self.directions[self.direction] * self.speed * dt
+
+        if self.overshotTarget():
+            self.node = self.target
+            directions = self.validDirection()
+            direction = self.randomDirection(directions)
+            if self.disablePortal == False: #may need to change
+                if self.node.neighbors[PORTAL] is not None:
+                    self.node = self.node.neighbors[PORTAL]
+            self.target = self.getNewTarget(direction)
+            if self.target is not self.node:
+                self.direction = direction
+            else:
+                self.target = self.getNewTarget(self.direction)
+
+            self.setPosition()
 
     def setPosition(self):
         self.position = self.node.position.copy()
