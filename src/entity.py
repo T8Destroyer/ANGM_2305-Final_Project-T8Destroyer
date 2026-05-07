@@ -9,11 +9,11 @@ class Entity(object):
     def __init__(self, node):
         self.name = None
         self.directions = {
-            STOP:Vector2(),
             UP:Vector2(0, -1),
             DOWN:Vector2(0, 1),
             LEFT:Vector2(-1, 0),
-            RIGHT:Vector2(1, 0)
+            RIGHT:Vector2(1, 0),
+            STOP:Vector2()
         }
         self.direction = STOP
         self.setSpeed(100)
@@ -25,6 +25,11 @@ class Entity(object):
         self.collideRadius = 5
         self.visible = True
         self.disablePortal = False
+        self.goal = None
+        self.directionMethod = self.goalDirection
+
+    def setPosition(self):
+        self.position = self.node.position.copy()
 
     def update(self, dt):
         self.position += self.directions[self.direction] * self.speed * dt
@@ -32,7 +37,7 @@ class Entity(object):
         if self.overshotTarget():
             self.node = self.target
             directions = self.validDirections()
-            direction = self.randomDirection(directions)
+            direction = self.directionMethod(directions)
             if self.disablePortal == False: #may need to change
                 if self.node.neighbors[PORTAL] is not None:
                     self.node = self.node.neighbors[PORTAL]
@@ -44,12 +49,9 @@ class Entity(object):
 
             self.setPosition()
 
-    def setPosition(self):
-        self.position = self.node.position.copy()
-
     def validDirection(self, direction):
-        if direction is not STOP:
-            if self.node.neighbors[direction] is not None:
+        if direction != STOP:
+            if self.node.neighbors[direction] != None:
                 return True
         return False
     
@@ -65,6 +67,14 @@ class Entity(object):
     
     def randomDirection(self, directions):
         return directions[randint(0, len(directions)-1)]
+    
+    def goalDirection(self, directions):
+        distances = []
+        for direction in directions:
+            vec = self.node.position + self.directions[direction]*TILEAREA - self.goal
+            distances.append(vec.magnitudeSquared())
+        index = distances.index(min(distances))
+        return directions[index]
     
     def getNewTarget(self, direction):
         if self.validDirection(direction):

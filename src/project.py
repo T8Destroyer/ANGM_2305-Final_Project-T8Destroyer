@@ -98,6 +98,8 @@ class Ghost(Entity):
         self.name = GHOST
         self.points = 200
         self.color = red
+        self.goal = Vector2()
+        self.directionMethod = self.goalDirection
 
 class Node(object):
 
