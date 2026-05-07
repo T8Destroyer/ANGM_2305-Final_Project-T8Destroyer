@@ -203,6 +203,11 @@ class NodeGroup(object):
                 elif data_trans[col][row] not in self.pathSymbols:
                     key = None
 
+    def connectHomeNodes(self, homekey, otherkey, direction):
+        key = self.constructKey(*otherkey)
+        self.nodesLUT[homekey].neighbors[direction] = self.nodesLUT[key]
+        self.nodesLUT[key].neighbors[direction*-1] = self.nodesLUT[homekey]
+
     def setPortalPair(self, pair1, pair2):
         key1 = self.constructKey(*pair1)
         key2 = self.constructKey(*pair2)
