@@ -25,10 +25,15 @@ PORTAL = 3
 PACMAN = 0
 PELLET = 1
 POWERPELLET = 2
+GHOST = 3
 
 #Note: for making mazes through text files:
-#   + = node
-#   . = path
+#   + = node with pellet
+#   P = node with powerpellet
+#   n = node without pellet
+#   . = path with pellet
+#   p = path with powerpellet
+#   -, | = path without pellet 
 #   X = empty
 #Build the maze in a txt file with a space between each character horizonatally, then fill any unused spaces with X
 
