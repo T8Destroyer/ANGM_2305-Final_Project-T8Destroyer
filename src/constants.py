@@ -26,6 +26,11 @@ PACMAN = 0
 PELLET = 1
 POWERPELLET = 2
 GHOST = 3
+#Ghost states
+SCATTER = 0
+CHASE = 1
+FRIGHT = 2
+EATEN = 3
 
 #Note: for making mazes through text files:
 #   + = node with pellet
