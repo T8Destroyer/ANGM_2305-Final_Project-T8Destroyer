@@ -20,8 +20,9 @@ class GameController(object):
         self.maze.connectHomeNodes(homekey, (12,14), LEFT)
         self.maze.connectHomeNodes(homekey, (15,14), RIGHT)
         self.pacman = Pacman(self.maze.getStartTempNode())
-        self.ghost = Ghost(self.maze.getStartTempNode(), self.pacman)
         self.pellets = PelletGroup("maze1.txt")
+        self.ghost = Ghost(self.maze.getStartTempNode(), self.pacman)
+        self.ghost.setSpawnNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
 
     def update(self, dt):
         self.pacman.update(dt)
@@ -122,6 +123,19 @@ class Ghost(Entity):
 
     def chase(self):
         self.goal = self.pacman.position
+
+    def eaten(self):
+        self.goal = self.spawnNode.position
+
+    def startEaten(self):
+        self.mode.setSpawnMode()
+        if self.mode.current == EATEN:
+            self.setSpeed(150)
+            self.directionMethod = self.goalDirection
+            self.eaten
+
+    def setSpawnNode(self, node):
+        self.setSpawnNode = node
 
     def startFright(self):
         self.mode.setFrightMode()
