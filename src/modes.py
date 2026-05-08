@@ -42,8 +42,17 @@ class ModeController(object):
                 self.duration = None
                 self.entity.setNormal()
                 self.current = self.mainmode.mode
-        else:
+        elif self.current in [SCATTER, CHASE]:
             self.current = self.mainmode.mode
+
+        if self.current == EATEN:
+            if self.entity.node == self.entity.spawnNode:
+                self.entity.setNormal()
+                self.current = self.mainmode.mode
+        
+    def setEatenMode(self):
+        if self.current == FRIGHT:
+            self.current = EATEN
 
     def setFrightMode(self):
         if self.current in [SCATTER, CHASE]:
