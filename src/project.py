@@ -22,18 +22,23 @@ class GameController(object):
         self.pacman = Pacman(self.maze.getStartTempNode())
         self.pellets = PelletGroup("maze1.txt")
         self.ghost = Ghost(self.maze.getStartTempNode(), self.pacman)
-        self.ghost.setSpawnNode(self.nodes.getNodeFromTiles(2+11.5, 3+14))
+        self.ghost.setSpawnNode(self.maze.getNodeFromTiles(2+11.5, 3+14))
 
     def update(self, dt):
         self.pacman.update(dt)
         self.ghost.update(dt)
         self.pellets.update(dt)
         self.checkPelletEvents()
+        self.checkGhostEvents()
         self.checkEvents()
         self.draw()
 
     def checkEvents(self):
         pass
+
+    def checkGhostEvents(self):
+        if self.pacman.collideGhost(self.ghost) == True and self.ghost.mode.current == FRIGHT:
+            self.ghost.startEaten()
 
     def checkPelletEvents(self):
         pellet = self.pacman.eatPellets(self.pellets.pellet_list)
@@ -136,14 +141,14 @@ class Ghost(Entity):
         self.goal = self.spawnNode.position
 
     def startEaten(self):
-        self.mode.setSpawnMode()
+        self.mode.setEatenMode()
         if self.mode.current == EATEN:
             self.setSpeed(150)
             self.directionMethod = self.goalDirection
-            self.eaten
+            self.eaten()
 
     def setSpawnNode(self, node):
-        self.setSpawnNode = node
+        self.spawnNode = node
 
     def startFright(self):
         self.mode.setFrightMode()
