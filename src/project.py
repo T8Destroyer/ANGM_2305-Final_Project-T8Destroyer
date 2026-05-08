@@ -173,7 +173,7 @@ class Node(object):
                 line_end = self.neighbors[i].position.asTuple()
                 if self.neighbors[PORTAL] is None:
                     pygame.draw.line(screen, white, line_start, line_end, 4)
-                pygame.draw.circle(screen, red, self.position.asIntTup(), 12)
+                pygame.draw.circle(screen, blue, self.position.asIntTup(), 12)
 
 class NodeGroup(object):
 

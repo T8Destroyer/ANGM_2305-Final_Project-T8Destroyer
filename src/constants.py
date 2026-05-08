@@ -9,6 +9,7 @@ RESOLUTION = (SCREENWIDTH, SCREENHEIGHT)
 #Color variables
 black = pygame.Color(0, 0, 0)
 yellow = pygame.Color(255, 255, 0)
+blue = pygame.Color(0, 0, 155)
 red = pygame.Color(255, 0, 0)
 pink = pygame.Color(247, 177, 247)
 cyan = pygame.Color(0, 247, 216)
