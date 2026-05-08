@@ -39,6 +39,8 @@ class GameController(object):
         if pellet:
             self.pellets.num_eaten += 1
             self.pellets.pellet_list.remove(pellet)
+            if pellet.name == POWERPELLET:
+                self.ghost.startFright()
 
     def draw(self):
         self.screen.blit(self.background, (0, 0))
@@ -120,6 +122,16 @@ class Ghost(Entity):
 
     def chase(self):
         self.goal = self.pacman.position
+
+    def startFright(self):
+        self.mode.setFrightMode()
+        if self.mode.current == FRIGHT:
+            self.setSpeed(50)
+            self.directionMethod = self.randomDirection
+
+    def setNormal(self):
+        self.setSpeed(100)
+        self.directionMethod = self.goalDirection
 
 class Node(object):
 

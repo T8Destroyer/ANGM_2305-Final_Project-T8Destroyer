@@ -36,4 +36,19 @@ class ModeController(object):
 
     def update(self, dt):
         self.mainmode.update(dt)
-        self.current = self.mainmode.mode
+        if self.current == FRIGHT:
+            self.timer += dt
+            if self.timer >= self.duration:
+                self.duration = None
+                self.entity.setNormal()
+                self.current = self.mainmode.mode
+        else:
+            self.current = self.mainmode.mode
+
+    def setFrightMode(self):
+        if self.current in [SCATTER, CHASE]:
+            self.timer = 0
+            self.duration = 7
+            self.current = FRIGHT
+        elif self.current == FRIGHT:
+            self.timer = 0
