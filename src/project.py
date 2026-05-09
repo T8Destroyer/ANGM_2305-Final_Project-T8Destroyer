@@ -4,7 +4,7 @@ from pygame.locals import *
 from pellet import PelletGroup
 import numpy as np
 from modes import ModeController
-from ghosts import *
+from ghosts import GhostGroup
 from entity import Entity
 from constants import *
 
@@ -22,12 +22,12 @@ class GameController(object):
         self.maze.connectHomeNodes(homekey, (15,14), RIGHT)
         self.pacman = Pacman(self.maze.getStartTempNode())
         self.pellets = PelletGroup("maze1.txt")
-        self.ghost = Ghost(self.maze.getStartTempNode(), self.pacman)
-        self.ghost.setSpawnNode(self.maze.getNodeFromTiles(2+11.5, 3+14))
+        self.ghosts = GhostGroup(self.maze.getStartTempNode(), self.pacman)
+        self.ghosts.setSpawnNode(self.maze.getNodeFromTiles(2+11.5, 3+14))
 
     def update(self, dt):
         self.pacman.update(dt)
-        self.ghost.update(dt)
+        self.ghosts.update(dt)
         self.pellets.update(dt)
         self.checkPelletEvents()
         self.checkGhostEvents()
@@ -38,8 +38,9 @@ class GameController(object):
         pass
 
     def checkGhostEvents(self):
-        if self.pacman.collideGhost(self.ghost) == True and self.ghost.mode.current == FRIGHT:
-            self.ghost.startEaten()
+        for ghost in self.ghosts:
+            if self.pacman.collideGhost(ghost) == True and ghost.mode.current == FRIGHT:
+                ghost.startEaten()
 
     def checkPelletEvents(self):
         pellet = self.pacman.eatPellets(self.pellets.pellet_list)
@@ -47,14 +48,14 @@ class GameController(object):
             self.pellets.num_eaten += 1
             self.pellets.pellet_list.remove(pellet)
             if pellet.name == POWERPELLET:
-                self.ghost.startFright()
+                self.ghosts.startFright()
 
     def draw(self):
         self.screen.blit(self.background, (0, 0))
         self.maze.draw(self.screen)
         self.pellets.draw(self.screen)
         self.pacman.draw(self.screen)
-        self.ghost.draw(self.screen)
+        self.ghosts.draw(self.screen)
 
 class Pacman(Entity):
 

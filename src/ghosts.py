@@ -5,7 +5,50 @@ from constants import *
 from entity import Entity
 from modes import ModeController
 
+class GhostGroup(object):
 
+    def __init__(self, node, pacman):
+        self.blinky = Blinky(node, pacman)
+        self.pinky = Pinky(node, pacman)
+        self.inky = Inky(node, pacman)
+        self.clyde = Clyde(node, pacman)
+        self.ghostLUT = [self.blinky, self.pinky, self.inky, self.clyde]
+
+    def __iter__(self):
+        return iter(self.ghostLUT)
+    
+    def update(self, dt):
+        for ghost in self:
+            ghost.update(dt)
+        
+    def startFright(self):
+        for ghost in self:
+            ghost.startFright()
+        self.resetPoints()
+    
+    def setSpawnNode(self, node):
+        for ghost in self:
+            ghost.setSpawnNode(node)
+
+    def updatePoints(self):
+        for ghost in self:
+            ghost.points *= 2
+
+    def resetPoints(self):
+        for ghost in self:
+            ghost.points = 200
+
+    def reset(self):
+        for ghost in self:
+            ghost.reset()
+
+    def hide(self):
+        for ghost in self:
+            ghost.visible = True
+
+    def draw(self, screen):
+        for ghost in self:
+            ghost.draw(screen)
 
 class Ghost(Entity):
 
@@ -61,7 +104,7 @@ class Ghost(Entity):
 class Blinky(Ghost):
 
     def __init__(self, node, pacman=None, blinky=None):
-        Ghost().__init__(node, pacman, blinky)
+        Ghost().__init__(self, node, pacman, blinky)
         self.name = BLINKY
         self.color = red
 
@@ -71,7 +114,7 @@ class Blinky(Ghost):
 class Pinky(Ghost):
     
     def __init__(self, node, pacman=None, blinky=None):
-        Ghost().__init__(node, pacman, blinky)
+        Ghost().__init__(self, node, pacman, blinky)
         self.name = PINKY
         self.color = pink
 
@@ -86,7 +129,7 @@ class Pinky(Ghost):
 class Inky(Ghost):
 
     def __init__(self, node, pacman=None, blinky=None):
-        Ghost().__init__(node, pacman, blinky)
+        Ghost().__init__(self, node, pacman, blinky)
         self.name = INKY
         self.color = cyan
 
@@ -101,7 +144,7 @@ class Inky(Ghost):
 class Clyde(Ghost):
 
     def __init__(self, node, pacman=None, blinky=None):
-        Ghost().__init__(node, pacman, blinky)
+        Ghost().__init__(self, node, pacman, blinky)
         self.name = CLYDE
         self.color = orange
 
