@@ -141,12 +141,13 @@ class Inky(Ghost):
 
     def chase(self):
         vec1 = self.pacman.position + self.pacman.directions[self.pacman.direction] * TILEAREA * 2
-        vec2 = (vec1 - self.blinky.position) * 2
-        self.goal = self.blinky.position + vec2
-
+        
         if self.pacman.direction == UP or self.pacman.prev_UP == True:
             d = Vector2(TILEAREA*4, 0)
-            self.goal = self.goal.__sub__(d)
+            vec1 = self.goal.__sub__(d)
+
+        vec2 = (vec1 - self.blinky.position) * 2
+        self.goal = self.blinky.position + vec2
 
 class Clyde(Ghost):
 
