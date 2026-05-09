@@ -63,10 +63,15 @@ class Pacman(Entity):
         Entity.__init__(self, node)
         self.name = PACMAN
         self.color = yellow
+        self.curr_key = self.direction
+        self.prev_key = self.curr_key
 
     def update(self, dt):
         self.position += self.directions[self.direction] * self.speed * dt
         direction = self.getValidKey()
+
+        self.prevKey()
+
 
         if self.overshotTarget():
             self.node = self.target
@@ -85,27 +90,22 @@ class Pacman(Entity):
                 self.reverseDirection()
 
     def getValidKey(self):
-        self.prev_key_UP = None
         key = pygame.key.get_pressed()
         if key[K_UP]:
             return UP
-            self.prev_key_UP = True
         if key[K_DOWN]:
             return DOWN
-            self.prev_key_UP = False 
         if key[K_LEFT]:
             return LEFT
-            self.prev_key_UP = False
         if key[K_RIGHT]:
-            self.prev_key_UP = False
             return RIGHT
         return STOP
     
-    def isPrevMoveUp(self):
-        if self.direction == STOP:
-            if self.prev_key_UP:
-                return True
-        return False
+    def prevKey(self):
+        #direction is constantly updated, so only when the value of the direction changes does this value change
+        if self.curr_key != self.direction:
+            self.prev_key = self.curr_key
+            self.curr_key = self.direction
     
     def eatPellets(self, pelletList):
         for pellet in pelletList:
@@ -261,6 +261,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
 
         game.update(dt)
 

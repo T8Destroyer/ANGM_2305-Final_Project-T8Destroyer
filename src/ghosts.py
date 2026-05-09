@@ -10,7 +10,7 @@ class GhostGroup(object):
     def __init__(self, node, pacman):
         self.blinky = Blinky(node, pacman)
         self.pinky = Pinky(node, pacman)
-        self.inky = Inky(node, pacman)
+        self.inky = Inky(node, pacman, self.blinky)
         self.clyde = Clyde(node, pacman)
         self.ghostLUT = [self.blinky, self.pinky, self.inky, self.clyde]
 
@@ -104,7 +104,7 @@ class Ghost(Entity):
 class Blinky(Ghost):
 
     def __init__(self, node, pacman=None, blinky=None):
-        Ghost().__init__(self, node, pacman, blinky)
+        Ghost.__init__(self, node, pacman, blinky)
         self.name = BLINKY
         self.color = red
 
@@ -114,7 +114,7 @@ class Blinky(Ghost):
 class Pinky(Ghost):
     
     def __init__(self, node, pacman=None, blinky=None):
-        Ghost().__init__(self, node, pacman, blinky)
+        Ghost.__init__(self, node, pacman, blinky)
         self.name = PINKY
         self.color = pink
 
@@ -123,13 +123,22 @@ class Pinky(Ghost):
 
     def chase(self):
         self.goal = self.pacman.position + self.pacman.directions[self.pacman.direction] * TILEAREA * 4
-        if self.pacman.direction == UP or self.pacman.isPrevMoveUP() == True:
-            self.goal = Vector2.__sub__(TILEAREA*4, 0)
+        print(self.pacman.position)
+
+        prev_UP = False
+        if self.pacman.prev_key == UP and self.pacman.curr_key == STOP:
+            prev_UP = True
+        else:
+            prev_UP = False
+
+        if self.pacman.direction == UP or prev_UP == True:
+            d = Vector2(TILEAREA*4, 0)
+            self.goal = self.goal.__sub__(d)
 
 class Inky(Ghost):
 
     def __init__(self, node, pacman=None, blinky=None):
-        Ghost().__init__(self, node, pacman, blinky)
+        Ghost.__init__(self, node, pacman, blinky)
         self.name = INKY
         self.color = cyan
 
@@ -141,10 +150,20 @@ class Inky(Ghost):
         vec2 = (vec1 - self.blinky.position) * 2
         self.goal = self.blinky.position + vec2
 
+        prev_UP = False
+        if self.pacman.prev_key == UP and self.pacman.curr_key == STOP:
+            prev_UP = True
+        else:
+            prev_UP = False
+
+        if self.pacman.direction == UP or prev_UP == True:
+            d = Vector2(TILEAREA*4, 0)
+            self.goal = self.goal.__sub__(d)
+
 class Clyde(Ghost):
 
     def __init__(self, node, pacman=None, blinky=None):
-        Ghost().__init__(self, node, pacman, blinky)
+        Ghost.__init__(self, node, pacman, blinky)
         self.name = CLYDE
         self.color = orange
 
