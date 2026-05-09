@@ -65,6 +65,7 @@ class Pacman(Entity):
         self.color = yellow
         self.curr_key = self.direction
         self.prev_key = self.curr_key
+        self.prev_UP = False
 
     def update(self, dt):
         self.position += self.directions[self.direction] * self.speed * dt
@@ -106,6 +107,10 @@ class Pacman(Entity):
         if self.curr_key != self.direction:
             self.prev_key = self.curr_key
             self.curr_key = self.direction
+        if self.prev_key == UP and self.curr_key == STOP:
+            self.prev_UP = True
+        else:
+            self.prev_UP = False
     
     def eatPellets(self, pelletList):
         for pellet in pelletList:

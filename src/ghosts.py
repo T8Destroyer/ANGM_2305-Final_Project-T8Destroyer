@@ -125,13 +125,7 @@ class Pinky(Ghost):
         self.goal = self.pacman.position + self.pacman.directions[self.pacman.direction] * TILEAREA * 4
         print(self.pacman.position)
 
-        prev_UP = False
-        if self.pacman.prev_key == UP and self.pacman.curr_key == STOP:
-            prev_UP = True
-        else:
-            prev_UP = False
-
-        if self.pacman.direction == UP or prev_UP == True:
+        if self.pacman.direction == UP or self.pacman.prev_UP == True:
             d = Vector2(TILEAREA*4, 0)
             self.goal = self.goal.__sub__(d)
 
@@ -150,13 +144,7 @@ class Inky(Ghost):
         vec2 = (vec1 - self.blinky.position) * 2
         self.goal = self.blinky.position + vec2
 
-        prev_UP = False
-        if self.pacman.prev_key == UP and self.pacman.curr_key == STOP:
-            prev_UP = True
-        else:
-            prev_UP = False
-
-        if self.pacman.direction == UP or prev_UP == True:
+        if self.pacman.direction == UP or self.pacman.prev_UP == True:
             d = Vector2(TILEAREA*4, 0)
             self.goal = self.goal.__sub__(d)
 
