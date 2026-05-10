@@ -123,7 +123,6 @@ class Pinky(Ghost):
 
     def chase(self):
         self.goal = self.pacman.position + self.pacman.directions[self.pacman.direction] * TILEAREA * 4
-        print(self.pacman.position)
 
         if self.pacman.direction == UP or self.pacman.prev_UP == True:
             d = Vector2(TILEAREA*4, 0)
@@ -143,7 +142,7 @@ class Inky(Ghost):
         vec1 = self.pacman.position + self.pacman.directions[self.pacman.direction] * TILEAREA * 2
         
         if self.pacman.direction == UP or self.pacman.prev_UP == True:
-            d = Vector2(TILEAREA*4, 0)
+            d = Vector2(TILEAREA*2, 0)
             vec1 = self.goal.__sub__(d)
 
         vec2 = (vec1 - self.blinky.position) * 2

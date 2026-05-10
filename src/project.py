@@ -20,9 +20,13 @@ class GameController(object):
         homekey = self.maze.createHomeNodes(11.5, 14)
         self.maze.connectHomeNodes(homekey, (12,14), LEFT)
         self.maze.connectHomeNodes(homekey, (15,14), RIGHT)
-        self.pacman = Pacman(self.maze.getStartTempNode())
+        self.pacman = Pacman(self.maze.getNodeFromTiles(15, 26))
         self.pellets = PelletGroup("maze1.txt")
         self.ghosts = GhostGroup(self.maze.getStartTempNode(), self.pacman)
+        self.ghosts.blinky.setStartNode(self.maze.getNodeFromTiles(2+11.5,0+14))
+        self.ghosts.pinky.setStartNode(self.maze.getNodeFromTiles(2+11.5,3+14))
+        self.ghosts.inky.setStartNode(self.maze.getNodeFromTiles(0+11.5,3+14))
+        self.ghosts.clyde.setStartNode(self.maze.getNodeFromTiles(4+11.5,3+14))
         self.ghosts.setSpawnNode(self.maze.getNodeFromTiles(2+11.5, 3+14))
 
     def update(self, dt):
@@ -63,6 +67,7 @@ class Pacman(Entity):
         Entity.__init__(self, node)
         self.name = PACMAN
         self.color = yellow
+        self.direction = LEFT
         self.curr_key = self.direction
         self.prev_key = self.curr_key
         self.prev_UP = False
@@ -103,7 +108,6 @@ class Pacman(Entity):
         return STOP
     
     def prevKey(self):
-        #direction is constantly updated, so only when the value of the direction changes does this value change
         if self.curr_key != self.direction:
             self.prev_key = self.curr_key
             self.curr_key = self.direction
@@ -234,6 +238,7 @@ class NodeGroup(object):
     def getNodeFromTiles(self, col, row):
         x, y = self.constructKey(col, row)
         if (x, y) in self.nodesLUT.keys():
+            print("Node found from Tiles")
             return self.nodesLUT[(x, y)]
         return None
 

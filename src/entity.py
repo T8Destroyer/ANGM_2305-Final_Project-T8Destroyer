@@ -19,14 +19,18 @@ class Entity(object):
         self.setSpeed(100)
         self.radius = 10
         self.color = white
-        self.node = node
-        self.setPosition()
-        self.target = node
         self.collideRadius = 5
         self.visible = True
         self.disablePortal = False
         self.goal = None
-        self.directionMethod = self.goalDirection
+        self.directionMethod = self.randomDirection
+        self.setStartNode(node)
+
+    def setStartNode(self, node):
+        self.node = node
+        self.startNode = node
+        self.target = node
+        self.setPosition()
 
     def setPosition(self):
         self.position = self.node.position.copy()
