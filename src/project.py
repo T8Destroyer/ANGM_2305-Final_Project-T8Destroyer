@@ -14,6 +14,7 @@ class GameController(object):
         self.screen = screen
         self.background = background
         self.fruit = None
+        self.pause = Pause(True)
 
     def startGame(self):
         self.maze = NodeGroup("maze1.txt")
@@ -31,14 +32,19 @@ class GameController(object):
         self.ghosts.setSpawnNode(self.maze.getNodeFromTiles(2+11.5, 3+14))
 
     def update(self, dt):
-        self.pacman.update(dt)
-        self.ghosts.update(dt)
         self.pellets.update(dt)
-        if self.fruit != None:
-            self.fruit.update(dt)
-        self.checkPelletEvents()
-        self.checkGhostEvents()
-        self.checkFruitEvents()
+        if self.pause.paused == False:
+            self.pacman.update(dt)
+            self.ghosts.update(dt)
+            if self.fruit != None:
+                self.fruit.update(dt)
+            self.checkPelletEvents()
+            self.checkGhostEvents()
+            self.checkFruitEvents()
+        afterPause = self.pause.update(dt)
+        if afterPause != None:
+            afterPause()
+
         self.checkEvents()
         self.draw()
 
@@ -282,6 +288,34 @@ class NodeGroup(object):
         for node in self.nodesLUT.values():
             node.draw(screen)
 
+class Pause(object):
+
+    def __init__(self, paused=False):
+        self.paused = paused
+        self.timer = 0
+        self.pause_time = None
+        self.func = None
+
+    def update (self, dt):
+        if self.pause_time != None:
+            self.timer += dt
+            if self.timer >= self.pause_time:
+                self.timer = 0
+                self.paused = False
+                self.pause_time = None
+                return self.func
+        return None
+    
+    def setPause(self, playerPaused=False, pause_time=None, func=None):
+        self.timer = 0
+        self.func = func
+        self.pause_time = pause_time
+        self.flip()
+
+    def flip(self):
+        self.paused = not self.paused
+        
+
 def main():
     print("Hello World!")
     pygame.init()
@@ -304,6 +338,9 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == KEYDOWN:
+                if event.key == K_SPACE:
+                    game.pause.setPause(playerPaused=True)
 
 
         game.update(dt)
