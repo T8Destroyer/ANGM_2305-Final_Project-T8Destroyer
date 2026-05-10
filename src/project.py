@@ -13,6 +13,7 @@ class GameController(object):
     def __init__(self, screen, background):
         self.screen = screen
         self.background = background
+        self.fruit = None
 
     def startGame(self):
         self.maze = NodeGroup("maze1.txt")
@@ -33,8 +34,11 @@ class GameController(object):
         self.pacman.update(dt)
         self.ghosts.update(dt)
         self.pellets.update(dt)
+        if self.fruit != None:
+            self.fruit.update(dt)
         self.checkPelletEvents()
         self.checkGhostEvents()
+        self.checkFruitEvents()
         self.checkEvents()
         self.draw()
 
@@ -45,6 +49,16 @@ class GameController(object):
         for ghost in self.ghosts:
             if self.pacman.collideGhost(ghost) == True and ghost.mode.current == FRIGHT:
                 ghost.startEaten()
+
+    def checkFruitEvents(self):
+        if self.pellets.num_eaten == 50 or self.pellets.num_eaten == 140:
+            if self.fruit == None:
+                self.fruit = Fruit(self.maze.getNodeFromTiles(9,20))
+            if self.fruit != None:
+                if self.pacman.collideCheck(self.fruit):
+                    self.fruit = None
+                elif self.fruit.destroy:
+                    self.fruit = None
 
     def checkPelletEvents(self):
         pellet = self.pacman.eatPellets(self.pellets.pellet_list)
@@ -58,6 +72,8 @@ class GameController(object):
         self.screen.blit(self.background, (0, 0))
         self.maze.draw(self.screen)
         self.pellets.draw(self.screen)
+        if self.fruit != None:
+            self.fruit.draw(self.screen)
         self.pacman.draw(self.screen)
         self.ghosts.draw(self.screen)
 
@@ -68,6 +84,7 @@ class Pacman(Entity):
         self.name = PACMAN
         self.color = yellow
         self.direction = LEFT
+        self.setBetweenNodes(LEFT)
         self.curr_key = self.direction
         self.prev_key = self.curr_key
         self.prev_UP = False

@@ -35,6 +35,11 @@ class Entity(object):
     def setPosition(self):
         self.position = self.node.position.copy()
 
+    def setBetweenNodes(self, direction):
+        if self.node.neighbors[direction] != None:
+            self.target = self.node.neighbors[direction]
+            self.position = (self.node.position + self.target.position) / 2.0
+
     def update(self, dt):
         self.position += self.directions[self.direction] * self.speed * dt
 
