@@ -12,7 +12,8 @@ class GhostGroup(object):
         self.pinky = Pinky(node, pacman)
         self.inky = Inky(node, pacman, self.blinky)
         self.clyde = Clyde(node, pacman)
-        self.ghostLUT = [self.blinky, self.pinky, self.inky, self.clyde]
+        self.hunky = Hunky(node, pacman)
+        self.ghostLUT = [self.blinky, self.pinky, self.inky, self.clyde, self.hunky]
 
     def __iter__(self):
         return iter(self.ghostLUT)
@@ -174,3 +175,21 @@ class Clyde(Ghost):
             self.scatter()
         else:
             self.goal = self.pacman.position
+
+class Hunky(Ghost):
+    
+    def __init__(self, node, pacman=None, blinky=None):
+        Ghost.__init__(self, node, pacman, blinky)
+        self.name = HUNKY
+        self.color = purple
+
+    def scatter(self):
+        self.goal = Vector2()
+
+    def chase(self):
+        d = Vector2(0, TILEAREA*4)
+        p = self.pacman.position.asIntTup()
+        if p[1] <= (TILEAREA*NROWS) / 2:
+            self.goal = self.pacman.position.__sub__(d)
+        else:
+            self.goal = self.pacman.position.__add__(d)

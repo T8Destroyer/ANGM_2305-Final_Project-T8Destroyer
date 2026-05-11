@@ -27,10 +27,11 @@ class GameController(object):
         self.pacman = Pacman(self.maze.getNodeFromTiles(15, 26))
         self.pellets = PelletGroup("maze1.txt")
         self.ghosts = GhostGroup(self.maze.getStartTempNode(), self.pacman)
-        self.ghosts.blinky.setStartNode(self.maze.getNodeFromTiles(2+11.5,0+14))
+        #self.ghosts.blinky.setStartNode(self.maze.getNodeFromTiles(2+11.5,0+14))
         self.ghosts.pinky.setStartNode(self.maze.getNodeFromTiles(2+11.5,3+14))
         self.ghosts.inky.setStartNode(self.maze.getNodeFromTiles(0+11.5,3+14))
         self.ghosts.clyde.setStartNode(self.maze.getNodeFromTiles(4+11.5,3+14))
+        self.ghosts.hunky.setStartNode(self.maze.getNodeFromTiles(2+11.5,0+14))
         self.ghosts.setSpawnNode(self.maze.getNodeFromTiles(2+11.5, 3+14))
 
     def update(self, dt):
@@ -234,6 +235,9 @@ class Node(object):
     def __init__(self, x, y):
         self.position = Vector2(x, y)
         self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None, PORTAL: None}
+        self.access = {
+
+        }
 
     def draw(self, screen):
         for i in self.neighbors.keys():
