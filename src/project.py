@@ -33,6 +33,17 @@ class GameController(object):
         self.ghosts.ghostLUT[3].setStartNode(self.maze.getNodeFromTiles(4+11.5,3+14))
         self.ghosts.setSpawnNode(self.maze.getNodeFromTiles(2+11.5, 3+14))
 
+        self.maze.denyHomeAccess(self.pacman)
+        self.maze.denyHomeAccessList(self.ghosts)
+        self.maze.denyAccessList(2+11.5, 3+14, LEFT, self.ghosts)
+        self.maze.denyAccessList(2+11.5, 3+14, RIGHT, self.ghosts)
+        self.ghosts.ghostLUT[2].startNode.denyAccess(RIGHT, self.ghosts.ghostLUT[2])
+        self.ghosts.ghostLUT[3].startNode.denyAccess(LEFT, self.ghosts.ghostLUT[3])
+        self.maze.denyAccessList(12, 14, UP, self.ghosts)
+        self.maze.denyAccessList(15, 14, UP, self.ghosts)
+        self.maze.denyAccessList(12, 26, UP, self.ghosts)
+        self.maze.denyAccessList(15, 26, UP, self.ghosts)
+
     def update(self, dt):
         self.pellets.update(dt)
         if self.pause.paused == False:
@@ -67,6 +78,7 @@ class GameController(object):
                     ghost.visible = False
                     self.pause.setPause(pause_time=1, func=self.showEntities)
                     ghost.startEaten()
+                    self.maze.allowHomeAccess(ghost)
                 elif ghost.mode.current != EATEN:
                     if self.pacman.alive:
                         self.lives -= 1
@@ -92,6 +104,10 @@ class GameController(object):
         if pellet:
             self.pellets.num_eaten += 1
             self.pellets.pellet_list.remove(pellet)
+            if self.pellets.num_eaten == 30:
+                self.ghosts.ghostLUT[2].startNode.allowAccess(RIGHT, self.ghosts.ghostLUT[2])
+            if self.pellets.num_eaten == 70:
+                self.ghosts.ghostLUT[3].startNode.allowAccess(LEFT, self.ghosts.ghostLUT[3])
             if pellet.name == POWERPELLET:
                 self.ghosts.startFright()
             if self.pellets.isEmpty():
@@ -234,19 +250,18 @@ class Node(object):
     def __init__(self, x, y):
         self.position = Vector2(x, y)
         self.neighbors = {UP:None, DOWN:None, LEFT:None, RIGHT:None, PORTAL: None}
-        self.accessList = [PACMAN, FRUIT, BLINKY, PINKY, INKY, CLYDE, HUNKY, SPUNKY, FUNKY, ALEXANDER]
         self.access = {
-                UP:self.accessList,
-                DOWN:self.accessList,
-                LEFT:self.accessList,
-                RIGHT:self.accessList
+                UP:[PACMAN, FRUIT, BLINKY, PINKY, INKY, CLYDE, HUNKY, SPUNKY, FUNKY, ALEXANDER],
+                DOWN:[PACMAN, FRUIT, BLINKY, PINKY, INKY, CLYDE, HUNKY, SPUNKY, FUNKY, ALEXANDER],
+                LEFT:[PACMAN, FRUIT, BLINKY, PINKY, INKY, CLYDE, HUNKY, SPUNKY, FUNKY, ALEXANDER],
+                RIGHT:[PACMAN, FRUIT, BLINKY, PINKY, INKY, CLYDE, HUNKY, SPUNKY, FUNKY, ALEXANDER]
         }
 
     def denyAccess(self, direction, entity):
         if entity.name in self.access[direction]:
             self.access[direction].remove(entity.name)
 
-    def alloyAccess(self, direction, entity):
+    def allowAccess(self, direction, entity):
         if entity.name not in self.access[direction]:
             self.access[direction].append(entity.name)
 
@@ -256,7 +271,7 @@ class Node(object):
                 line_start = self.position.asTuple()
                 line_end = self.neighbors[i].position.asTuple()
                 if self.neighbors[PORTAL] is None:
-                    pygame.draw.line(screen, white, line_start, line_end, 4)
+                    pygame.draw.line(screen, blue, line_start, line_end, 4)
                 pygame.draw.circle(screen, blue, self.position.asIntTup(), 12)
 
 class NodeGroup(object):
@@ -377,7 +392,7 @@ class NodeGroup(object):
         self.nodesLUT[self.homekey].denyAccess(DOWN, entity)
 
     def allowHomeAccess(self, entity):
-        self.nodesLUT[self.homekey].alllowAccess(DOWN, entity)
+        self.nodesLUT[self.homekey].allowAccess(DOWN, entity)
 
     def denyHomeAccessList(self, entities):
         for entity in entities:

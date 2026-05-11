@@ -114,17 +114,31 @@ class Ghost(Entity):
         self.mode = ModeController(self)
         self.blinky = blinky
         self.homenode= node
+        self.scatter_rev = True
+        self.chase_rev = True
 
     def update(self, dt):
         self.mode.update(dt)
         if self.mode.current == SCATTER:
             self.scatter()
+            if self.scatter_rev:
+                self.reverseDirection()
+                self.scatter_rev = False
+                self.chase_rev = True
         if self.mode.current == CHASE:
             self.chase()
+            if self.chase_rev:
+                self.reverseDirection()
+                self.chase_rev = False
+                self.scatter_rev = True
         Entity.update(self, dt)
 
     def scatter(self):
         self.goal = Vector2(TILEAREA*NCOLS, 0)
+
+    def startChase(self):
+        self.reverseDirection()
+        self.chase()
 
     def chase(self):
         self.goal = self.pacman.position
@@ -152,6 +166,7 @@ class Ghost(Entity):
     def setNormal(self):
         self.setSpeed(100)
         self.directionMethod = self.goalDirection
+        self.homenode.denyAccess(DOWN, self)
 
     def reset(self):
         Entity.reset(self)
