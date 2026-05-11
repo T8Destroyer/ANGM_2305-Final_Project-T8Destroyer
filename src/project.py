@@ -54,6 +54,9 @@ class GameController(object):
     def checkGhostEvents(self):
         for ghost in self.ghosts:
             if self.pacman.collideGhost(ghost) == True and ghost.mode.current == FRIGHT:
+                self.pacman.visible = False
+                ghost.visible = False
+                self.pause.setPause(pause_time=1, func=self.showEntities)
                 ghost.startEaten()
 
     def checkFruitEvents(self):
@@ -73,6 +76,14 @@ class GameController(object):
             self.pellets.pellet_list.remove(pellet)
             if pellet.name == POWERPELLET:
                 self.ghosts.startFright()
+
+    def showEntities(self):
+        self.pacman.visible = True
+        self.ghosts.show()
+
+    def hideEntities(self):
+        self.pacman.visible = False
+        self.ghosts.hide()
 
     def draw(self):
         self.screen.blit(self.background, (0, 0))
@@ -159,6 +170,7 @@ class Pacman(Entity):
 class Fruit(Entity):
 
     def __init__(self, node):
+        Entity.__init__(self, node)
         self.name = FRUIT
         self.color = green
         self.lifespan = 5
@@ -341,6 +353,8 @@ def main():
             elif event.type == KEYDOWN:
                 if event.key == K_SPACE:
                     game.pause.setPause(playerPaused=True)
+                    #if not game.pause.paused:
+                    
 
 
         game.update(dt)

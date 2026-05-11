@@ -44,6 +44,10 @@ class GhostGroup(object):
 
     def hide(self):
         for ghost in self:
+            ghost.visible = False
+
+    def show(self):
+        for ghost in self:
             ghost.visible = True
 
     def draw(self, screen):
