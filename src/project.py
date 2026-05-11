@@ -27,11 +27,10 @@ class GameController(object):
         self.pacman = Pacman(self.maze.getNodeFromTiles(15, 26))
         self.pellets = PelletGroup("maze1.txt")
         self.ghosts = GhostGroup(self.maze.getStartTempNode(), self.pacman)
-        #self.ghosts.blinky.setStartNode(self.maze.getNodeFromTiles(2+11.5,0+14))
-        self.ghosts.pinky.setStartNode(self.maze.getNodeFromTiles(2+11.5,3+14))
-        self.ghosts.inky.setStartNode(self.maze.getNodeFromTiles(0+11.5,3+14))
-        self.ghosts.clyde.setStartNode(self.maze.getNodeFromTiles(4+11.5,3+14))
-        self.ghosts.hunky.setStartNode(self.maze.getNodeFromTiles(2+11.5,0+14))
+        self.ghosts.ghostLUT[0].setStartNode(self.maze.getNodeFromTiles(2+11.5,0+14))
+        self.ghosts.ghostLUT[1].setStartNode(self.maze.getNodeFromTiles(2+11.5,3+14))
+        self.ghosts.ghostLUT[2].setStartNode(self.maze.getNodeFromTiles(0+11.5,3+14))
+        self.ghosts.ghostLUT[3].setStartNode(self.maze.getNodeFromTiles(4+11.5,3+14))
         self.ghosts.setSpawnNode(self.maze.getNodeFromTiles(2+11.5, 3+14))
 
     def update(self, dt):
@@ -338,7 +337,6 @@ class NodeGroup(object):
     def getNodeFromTiles(self, col, row):
         x, y = self.constructKey(col, row)
         if (x, y) in self.nodesLUT.keys():
-            print("Node found from Tiles")
             return self.nodesLUT[(x, y)]
         return None
 

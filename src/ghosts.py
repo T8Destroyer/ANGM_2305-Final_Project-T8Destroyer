@@ -13,10 +13,36 @@ class GhostGroup(object):
         self.inky = Inky(node, pacman, self.blinky)
         self.clyde = Clyde(node, pacman)
         self.hunky = Hunky(node, pacman)
-        self.ghostLUT = [self.blinky, self.pinky, self.inky, self.clyde, self.hunky]
+        self.ghostList = [self.blinky, self.pinky, self.inky, self.clyde, self.hunky]
+        self.ghostLUT = [None, None, None, None]
+        self.chooseGhosts(node, pacman)
 
     def __iter__(self):
         return iter(self.ghostLUT)
+    
+    def chooseGhosts(self, node, pacman):
+        print(f"Choose Four Ghosts:\n-Blinky\n-Pinky\n-Inky\n-Clyde\n-Hunky\n")
+        running = True
+        count = 0
+        while running:
+            ghost = input(f"Ghost #{count+1}: ").upper()
+            match ghost:
+                case "BLINKY":
+                    self.ghostLUT[count] = Blinky(node, pacman)
+                case "PINKY":
+                    self.ghostLUT[count] = Pinky(node, pacman)
+                case "INKY":
+                    self.ghostLUT.append(self.inky)
+                case "CLYDE":
+                    self.ghostLUT[count] = Clyde(node, pacman)
+                case "HUNKY":
+                    self.ghostLUT[count] = Hunky(node, pacman)
+                case _:
+                    print("Ghost not recognized. Please try again.")
+                    count-=1
+            count+=1
+            if count >= 4:
+                running = False
     
     def update(self, dt):
         for ghost in self:
@@ -99,6 +125,7 @@ class Ghost(Entity):
     def startFright(self):
         self.mode.setFrightMode()
         if self.mode.current == FRIGHT:
+            self.reverseDirection()
             self.setSpeed(50)
             self.directionMethod = self.randomDirection
 
