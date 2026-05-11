@@ -7,7 +7,7 @@ Demo Video: https://vimeo.com/1191339868
 GitHub Repo: https://github.com/T8Destroyer/ANGM_2305-Final_Project-T8Destroyer
 
 ## Description
-This project is a recreation of the original arcade game PAC-MAN in python, plus some extra additions. This game uses a vector node system to connect and guide pacman and the ghosts throughout the maze. Each node is connected to others by assigning cardinal directions between them.The maze itself is made from a text file, which translates text characters into nodes, paths, and boundaries.
+This project is a recreation of the original arcade game PAC-MAN in python, plus some extra additions. This game uses a vector node system to connect and guide pacman and the ghosts throughout the maze. Each node is connected to others by assigning cardinal directions between them. The maze itself is made from a text file, which translates text characters into nodes, paths, and boundaries.
 
 PacMan, the ghosts, and even fruit work based on an entity class, setting the ground work for how these characters would actually interact with the maze. Each character then has their own seperate classes built on the entity class, giving different behavior to each while keeping their interactions with the maze the same.
 
