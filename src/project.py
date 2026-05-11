@@ -15,6 +15,7 @@ class GameController(object):
         self.background = background
         self.fruit = None
         self.pause = Pause(True)
+        self.level = 0
 
     def startGame(self):
         self.maze = NodeGroup("maze1.txt")
@@ -47,6 +48,11 @@ class GameController(object):
 
         self.checkEvents()
         self.draw()
+
+    def nextLevel(self):
+        self.level += 1
+        self.pause.paused = True
+        self.startGame()
 
     def checkEvents(self):
         pass
@@ -353,10 +359,11 @@ def main():
             elif event.type == KEYDOWN:
                 if event.key == K_SPACE:
                     game.pause.setPause(playerPaused=True)
-                    #if not game.pause.paused:
+                    if not game.pause.paused:
+                        game.showEntities()
+                    else:
+                        game.hideEntities()
                     
-
-
         game.update(dt)
 
         pygame.display.flip()
