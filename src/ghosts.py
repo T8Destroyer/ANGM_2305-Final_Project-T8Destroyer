@@ -8,13 +8,13 @@ from modes import ModeController
 class GhostGroup(object):
 
     def __init__(self, node, pacman):
-        self.blinky = Blinky(node, pacman)
-        self.pinky = Pinky(node, pacman)
-        self.inky = Inky(node, pacman)
-        self.clyde = Clyde(node, pacman)
-        self.hunky = Hunky(node, pacman)
+        #self.blinky = Blinky(node, pacman)
+        #self.pinky = Pinky(node, pacman)
+        #self.inky = Inky(node, pacman)
+        #self.clyde = Clyde(node, pacman)
+        #self.hunky = Hunky(node, pacman)
         self.blinky_at = None
-        self.ghostList = [self.blinky, self.pinky, self.inky, self.clyde, self.hunky]
+        #self.ghostList = [self.blinky, self.pinky, self.inky, self.clyde, self.hunky]
         self.ghostLUT = [None, None, None, None]
         self.chooseGhosts(node, pacman)
 
@@ -22,7 +22,7 @@ class GhostGroup(object):
         return iter(self.ghostLUT)
     
     def chooseGhosts(self, node, pacman):
-        print(f"\nChoose Four Ghosts:\n-Blinky\n-Pinky\n-Inky\n-Clyde\n-Hunky\n")
+        print(f"\nChoose Four Ghosts:\n-Blinky\n-Pinky\n-Inky\n-Clyde\n-Hunky\n-Spunky\n")
         running = True
         blinky_found = False
         self.blinky_at = None
@@ -45,6 +45,8 @@ class GhostGroup(object):
                     self.ghostLUT[count] = Clyde(node, pacman)
                 case "HUNKY":
                     self.ghostLUT[count] = Hunky(node, pacman)
+                case "SPUNKY":
+                    self.ghostLUT[count] = Spunky(node, pacman)
                 case _:
                     print("Ghost not recognized. Please try again.")
                     count-=1
@@ -223,10 +225,10 @@ class Hunky(Ghost):
     def __init__(self, node, pacman=None, blinky=None):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = HUNKY
-        self.color = purple
+        self.color = gray
 
     def scatter(self):
-        self.goal = Vector2()
+        self.goal = Vector2(TILEAREA*NCOLS, 0)
 
     def chase(self):
         d = Vector2(0, TILEAREA*4)
@@ -235,3 +237,18 @@ class Hunky(Ghost):
             self.goal = self.pacman.position.__sub__(d)
         else:
             self.goal = self.pacman.position.__add__(d)
+
+class Spunky(Ghost):
+
+    def __init__(self, node, pacman=None, blinky=None):
+        Ghost.__init__(self, node, pacman, blinky)
+        self.name = SPUNKY
+        self.color = purple
+
+    def scatter(self):
+        self.goal = Vector2()
+
+    def chase(self):
+        c = Vector2((TILEAREA*NCOLS)/2, (TILEAREA*NROWS)/2)
+        vec = (self.pacman.position - c) / 2
+        self.goal = vec + c

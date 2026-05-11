@@ -17,6 +17,7 @@ orange = pygame.Color(247, 155, 1)
 white = pygame.Color(255, 255, 255)
 green = pygame.Color(0, 255, 0)
 purple = pygame.Color(255, 0, 255)
+gray = pygame.Color(100, 100, 100)
 #Movement Variables
 STOP = 0
 UP = 1
@@ -35,6 +36,7 @@ INKY = 6
 CLYDE = 7
 FRUIT = 8
 HUNKY = 9
+SPUNKY = 10
 #Ghost states
 SCATTER = 0
 CHASE = 1
