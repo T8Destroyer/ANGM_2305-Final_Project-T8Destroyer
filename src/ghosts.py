@@ -10,9 +10,10 @@ class GhostGroup(object):
     def __init__(self, node, pacman):
         self.blinky = Blinky(node, pacman)
         self.pinky = Pinky(node, pacman)
-        self.inky = Inky(node, pacman, self.blinky)
+        self.inky = Inky(node, pacman)
         self.clyde = Clyde(node, pacman)
         self.hunky = Hunky(node, pacman)
+        self.blinky_at = None
         self.ghostList = [self.blinky, self.pinky, self.inky, self.clyde, self.hunky]
         self.ghostLUT = [None, None, None, None]
         self.chooseGhosts(node, pacman)
@@ -21,18 +22,25 @@ class GhostGroup(object):
         return iter(self.ghostLUT)
     
     def chooseGhosts(self, node, pacman):
-        print(f"Choose Four Ghosts:\n-Blinky\n-Pinky\n-Inky\n-Clyde\n-Hunky\n")
+        print(f"\nChoose Four Ghosts:\n-Blinky\n-Pinky\n-Inky\n-Clyde\n-Hunky\n")
         running = True
+        blinky_found = False
+        self.blinky_at = None
         count = 0
+        inky_count = []
+
         while running:
             ghost = input(f"Ghost #{count+1}: ").upper()
             match ghost:
                 case "BLINKY":
                     self.ghostLUT[count] = Blinky(node, pacman)
+                    if blinky_found == False:
+                        self.blinky_at = count
+                        blinky_found = True
                 case "PINKY":
                     self.ghostLUT[count] = Pinky(node, pacman)
                 case "INKY":
-                    self.ghostLUT.append(self.inky)
+                    inky_count.append(count)
                 case "CLYDE":
                     self.ghostLUT[count] = Clyde(node, pacman)
                 case "HUNKY":
@@ -42,6 +50,12 @@ class GhostGroup(object):
                     count-=1
             count+=1
             if count >= 4:
+                if len(inky_count) > 0:
+                    for i in range(len(inky_count)):
+                        if blinky_found:
+                            self.ghostLUT[inky_count[i]] = Inky(node, pacman, self.ghostLUT[self.blinky_at])
+                        else:
+                            self.ghostLUT[inky_count[i]] = Inky(node, pacman, self.ghostLUT[int(inky_count[i] - 1)])
                 running = False
     
     def update(self, dt):
@@ -171,6 +185,7 @@ class Inky(Ghost):
         Ghost.__init__(self, node, pacman, blinky)
         self.name = INKY
         self.color = cyan
+        self.follow = blinky
 
     def scatter(self):
         self.goal = Vector2(TILEAREA*NCOLS, TILEAREA*NROWS)
@@ -182,8 +197,8 @@ class Inky(Ghost):
             d = Vector2(TILEAREA*2, 0)
             vec1 = self.goal.__sub__(d)
 
-        vec2 = (vec1 - self.blinky.position) * 2
-        self.goal = self.blinky.position + vec2
+        vec2 = (vec1 - self.follow.position) * 2
+        self.goal = self.follow.position + vec2
 
 class Clyde(Ghost):
 
