@@ -128,6 +128,7 @@ class Pacman(Entity):
         self.curr_key = self.direction
         self.prev_key = self.curr_key
         self.prev_UP = False
+        self.alive = True
 
     def update(self, dt):
         self.position += self.directions[self.direction] * self.speed * dt
@@ -189,6 +190,16 @@ class Pacman(Entity):
         if d_sqr <= r_sqr:
             return True
         return False
+    
+    def reset(self):
+        Entity.reset(self)
+        self.direction = LEFT
+        self.setBetweenNodes(LEFT)
+        self.alive = True
+
+    def die(self):
+        self.alive = False
+        self.direction = STOP
 
 class Fruit(Entity):
 
@@ -373,9 +384,9 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-#
-#                if event.key == K_SPACE:
-#                    game.pause.setPause(playerPaused=True)
+            if event.type == pygame.KEYDOWN:
+                if event.key == K_SPACE:
+                    game.pause.setPause(playerPaused=True)
 #                    if not game.pause.paused:
 #                        game.showEntities()
 #                    else:
