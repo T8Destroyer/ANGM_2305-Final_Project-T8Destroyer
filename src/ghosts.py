@@ -22,7 +22,7 @@ class GhostGroup(object):
         return iter(self.ghostLUT)
     
     def chooseGhosts(self, node, pacman):
-        print(f"\nChoose Four Ghosts:\n-Blinky\n-Pinky\n-Inky\n-Clyde\n-Hunky\n-Spunky\n")
+        print(f"\nChoose Four Ghosts:\n-Blinky\n-Pinky\n-Inky\n-Clyde\n-Hunky\n-Spunky\n-Funky\n")
         running = True
         blinky_found = False
         self.blinky_at = None
@@ -47,6 +47,8 @@ class GhostGroup(object):
                     self.ghostLUT[count] = Hunky(node, pacman)
                 case "SPUNKY":
                     self.ghostLUT[count] = Spunky(node, pacman)
+                case "FUNKY":
+                    self.ghostLUT[count] = Funky(node, pacman)
                 case _:
                     print("Ghost not recognized. Please try again.")
                     count-=1
@@ -252,3 +254,25 @@ class Spunky(Ghost):
         c = Vector2((TILEAREA*NCOLS)/2, (TILEAREA*NROWS)/2)
         vec = (self.pacman.position - c) / 2
         self.goal = vec + c
+
+class Funky(Ghost):
+
+    def __init__(self, node, pacman=None, blinky=None):
+        Ghost.__init__(self, node, pacman, blinky)
+        self.name = FUNKY
+        self.color = lime
+
+    def scatter(self):
+        self.goal = Vector2(TILEAREA*NCOLS, TILEAREA*NROWS)
+
+    def chase(self):
+        d = self.pacman.position - self.position
+        ds = d.magnitudeSquared()
+        if ds <= (TILEAREA*8)**2:
+            self.goal = (self.pacman.position + self.pacman.directions[self.pacman.direction] * TILEAREA * 8) - d
+            p = self.goal.asIntTup()
+            if self.pacman.direction == UP or self.pacman.prev_UP == True:
+                c = Vector2(p[0], 0)
+                self.goal = self.goal.__sub__(c)
+        else:
+            self.goal = self.pacman.position
