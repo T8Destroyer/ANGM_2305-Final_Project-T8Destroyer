@@ -117,7 +117,7 @@ class Entity(object):
     def reset(self):
         self.setStartNode(self.startNode)
         self.direction = STOP
-        self.speed = 100
+        self.setSpeed(100)
         self.visible = True
 
     def draw(self, screen):

@@ -16,6 +16,7 @@ class GameController(object):
         self.fruit = None
         self.pause = Pause(True)
         self.level = 0
+        self.lives = 5
 
     def startGame(self):
         self.maze = NodeGroup("maze1.txt")
@@ -60,11 +61,21 @@ class GameController(object):
 
     def checkGhostEvents(self):
         for ghost in self.ghosts:
-            if self.pacman.collideGhost(ghost) == True and ghost.mode.current == FRIGHT:
-                self.pacman.visible = False
-                ghost.visible = False
-                self.pause.setPause(pause_time=1, func=self.showEntities)
-                ghost.startEaten()
+            if self.pacman.collideGhost(ghost) == True:
+                if ghost.mode.current == FRIGHT:
+                    self.pacman.visible = False
+                    ghost.visible = False
+                    self.pause.setPause(pause_time=1, func=self.showEntities)
+                    ghost.startEaten()
+                elif ghost.mode.current != EATEN:
+                    if self.pacman.alive:
+                        self.lives -= 1
+                        self.pacman.die()
+                        self.ghosts.hide()
+                        if self.lives <= 0:
+                            self.pause.setPause(pause_time=3, func=self.restartGame)
+                        else:
+                            self.pause.setPause(pause_time=4, func=self.resetLevel)
 
     def checkFruitEvents(self):
         if self.pellets.num_eaten == 50 or self.pellets.num_eaten == 140:
@@ -386,7 +397,8 @@ def main():
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == K_SPACE:
-                    game.pause.setPause(playerPaused=True)
+                    if game.pacman.alive:
+                        game.pause.setPause(playerPaused=True)
 #                    if not game.pause.paused:
 #                        game.showEntities()
 #                    else:
