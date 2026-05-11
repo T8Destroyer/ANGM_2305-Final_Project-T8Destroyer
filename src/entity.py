@@ -60,8 +60,9 @@ class Entity(object):
 
     def validDirection(self, direction):
         if direction != STOP:
-            if self.node.neighbors[direction] != None:
-                return True
+            if self.name in self.node.access[direction]:
+                if self.node.neighbors[direction] != None:
+                    return True
         return False
     
     def validDirections(self):
