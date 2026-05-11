@@ -50,6 +50,7 @@ class GameController(object):
         self.draw()
 
     def nextLevel(self):
+        self.showEntities()
         self.level += 1
         self.pause.paused = True
         self.startGame()
@@ -82,6 +83,9 @@ class GameController(object):
             self.pellets.pellet_list.remove(pellet)
             if pellet.name == POWERPELLET:
                 self.ghosts.startFright()
+            if self.pellets.isEmpty():
+                self.hideEntities()
+                self.pause.setPause(pause_time=3, func=self.nextLevel)
 
     def showEntities(self):
         self.pacman.visible = True
@@ -90,6 +94,19 @@ class GameController(object):
     def hideEntities(self):
         self.pacman.visible = False
         self.ghosts.hide()
+
+    def restartGame(self):
+        self.lives = 5
+        self.level = 0
+        self.pause.paused = True
+        self.fruit = None
+        self.startGame()
+
+    def resetLevel(self):
+        self.pause.paused = True
+        self.pacman.reset()
+        self.ghosts.reset()
+        self.fruit = None
 
     def draw(self):
         self.screen.blit(self.background, (0, 0))
@@ -356,13 +373,13 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == KEYDOWN:
-                if event.key == K_SPACE:
-                    game.pause.setPause(playerPaused=True)
-                    if not game.pause.paused:
-                        game.showEntities()
-                    else:
-                        game.hideEntities()
+#
+#                if event.key == K_SPACE:
+#                    game.pause.setPause(playerPaused=True)
+#                    if not game.pause.paused:
+#                        game.showEntities()
+#                    else:
+#                        game.hideEntities()
                     
         game.update(dt)
 

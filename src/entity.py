@@ -114,6 +114,12 @@ class Entity(object):
     def setSpeed(self, speed):
         self.speed = speed * TILEAREA / 16
 
+    def reset(self):
+        self.setStartNode(self.startNode)
+        self.direction = STOP
+        self.speed = 100
+        self.visible = True
+
     def draw(self, screen):
         if self.visible:
             p = self.position.asIntTup()
